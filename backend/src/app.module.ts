@@ -1,4 +1,14 @@
-import { Logger, Module } from '@nestjs/common';
+import {
+  Logger,
+  Module,
+  MiddlewareConsumer,
+  NestModule,
+  StandardSchemaValidationPipe,
+} from '@nestjs/common';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import cookieParser from 'cookie-parser';
+import { LoggingInterceptor } from './common/logging.interceptor.js';
+import { LoggingExceptionFilter } from './common/logging.filter.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { DrizzleModule } from '@nestjs/drizzle';
@@ -52,6 +62,15 @@ try {
     CartModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    { provide: APP_PIPE, useClass: StandardSchemaValidationPipe },
+    { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
+    { provide: APP_FILTER, useClass: LoggingExceptionFilter },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(cookieParser()).forRoutes('*');
+  }
+}

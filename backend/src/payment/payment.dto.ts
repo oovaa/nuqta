@@ -10,6 +10,6 @@ export const CreatePaymentDto = z.object({
   cardNumber: z.string().optional(),
   cvv: z.string().optional(),
   expiry: z.string().optional(),
-});
+}).strict();
 
 export type CreatePaymentDtoType = z.infer<typeof CreatePaymentDto>;

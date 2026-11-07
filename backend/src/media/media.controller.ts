@@ -9,7 +9,14 @@ const DIR = '/var/nuqta/images';
 export class MediaController {
   @Get(':name')
   async get(@Param('name') name: string, @Res() res: Response): Promise<void> {
-    const file = path.join(DIR, path.basename(name));
+    const safe = path.basename(name);
+    const ext = path.extname(safe).toLowerCase();
+    const allowed = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg', '.avif']);
+    if (!allowed.has(ext)) {
+      res.status(400).end();
+      return;
+    }
+    const file = path.join(DIR, safe);
     if (!fs.existsSync(file)) {
       res.status(404).end();
       return;

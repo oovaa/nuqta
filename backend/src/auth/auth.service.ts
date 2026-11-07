@@ -123,8 +123,7 @@ export class AuthService {
 
   async resetPassword(email: string, oldPassword: string, newPassword: string): Promise<void> {
     this.logger.log(`resetPassword: email=${email}`);
-    const rows = await this.db.select().from(users).where(eq(users.email, email)).limit(1);
-    const user = rows[0];
+    const user = await this.db.query.users.findFirst({ where: { email: email } });
     if (!user) throw new UnauthorizedException();
     await this.changePassword(user.id, oldPassword, newPassword);
   }

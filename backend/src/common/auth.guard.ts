@@ -2,6 +2,13 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import type { Request } from 'express';
 import * as crypto from 'node:crypto';
 
+export type AuthedRequest = Request & {
+  user: {
+    id: string;
+    role: string;
+  };
+};
+
 function parseCookies(header?: string): Record<string, string> {
   const out: Record<string, string> = {};
   if (!header) return out;
@@ -31,7 +38,7 @@ function verifyToken(token: string, secret: string): { sub: number; role: string
 export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest<Request>();
-    const cookies = parseCookies(req.headers.cookie);
+    const cookies = (req as any).cookies ?? parseCookies(req.headers.cookie);
     const secret = process.env.JWT_SECRET ?? 'dev-secret';
     const payload = cookies.access_token ? verifyToken(cookies.access_token, secret) : null;
     if (!payload) throw new UnauthorizedException();

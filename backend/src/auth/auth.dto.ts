@@ -7,23 +7,23 @@ export const RegisterDto = z.object({
   phone: z.string().optional(),
   city: z.string().optional(),
   address: z.string().optional(),
-});
+}).strict();
 
 export const LoginDto = z.object({
   email: z.string().email(),
   password: z.string().min(1),
-});
+}).strict();
 
 export const ChangePasswordDto = z.object({
   oldPassword: z.string().min(1),
   newPassword: z.string().min(6),
-});
+}).strict();
 
 export const ResetPasswordDto = z.object({
   email: z.string().email(),
   oldPassword: z.string().min(1),
   newPassword: z.string().min(6),
-});
+}).strict();
 
 export type RegisterDtoType = z.infer<typeof RegisterDto>;
 export type LoginDtoType = z.infer<typeof LoginDto>;

@@ -1,16 +1,30 @@
-import { pgTable, serial, text, integer, numeric, timestamp, pgEnum, unique } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  serial,
+  text,
+  integer,
+  numeric,
+  timestamp,
+  pgEnum,
+  unique,
+} from 'drizzle-orm/pg-core';
 import { defineRelationsPart } from 'drizzle-orm';
 
 // --- Enums ---
 export const userRoleEnum = pgEnum('user_role', ['user', 'admin']);
-export const cartStatusEnum = pgEnum('cart_status', ['active', 'checked_out', 'abandoned', 'completed']);
+export const cartStatusEnum = pgEnum('cart_status', [
+  'active',
+  'checked_out',
+  'abandoned',
+  'completed',
+]);
 export const statusEnum = pgEnum('status', ['pending', 'approved', 'rejected', 'completed']);
 export const romTypeEnum = pgEnum('rom_type', ['ssd', 'hdd']);
 export const partTypeEnum = pgEnum('part_type', ['model', 'ram', 'ssd', 'hdd']);
 
 // --- 1. Users Table ---
 // Note: phone, city, and address are nullable for optional shipping auto-fill
-export const users = pgTable('user', {
+export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
@@ -47,19 +61,23 @@ export const products = pgTable('products', {
 });
 
 // --- 3b. Reviews Table ---
-export const reviews = pgTable('reviews', {
-  id: serial('id').primaryKey(),
-  userId: integer('user_id')
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
-  productId: integer('product_id')
-    .notNull()
-    .references(() => products.id, { onDelete: 'cascade' }),
-  review: text('review').notNull(),
-  rating: integer('rating'),
-}, (t) => ({
-  userProductUnique: unique().on(t.userId, t.productId),
-}));
+export const reviews = pgTable(
+  'reviews',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    productId: integer('product_id')
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    review: text('review').notNull(),
+    rating: integer('rating'),
+  },
+  (t) => ({
+    userProductUnique: unique().on(t.userId, t.productId),
+  }),
+);
 
 // --- 4. Sold Laptops Table (User Trade-In / Resell) ---
 export const soldLaptops = pgTable('sold_laptops', {
@@ -292,8 +310,6 @@ export const paymentsRelations = defineRelationsPart(tables, (r) => ({
     }),
   },
 }));
-
-
 
 export const reviewsRelations = defineRelationsPart(tables, (r) => ({
   reviews: {

@@ -15,17 +15,15 @@ import { UsersService } from './users.service.js';
 import { UpdateUserDto, UpdateUserRoleDto } from './users.dto.js';
 import type { UpdateUserDtoType, UpdateUserRoleDtoType } from './users.dto.js';
 import { z } from 'zod';
-import { log } from 'node:console';
 
 @Controller('users')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, AdminGuard)
 export class UsersController {
   constructor(private readonly svc: UsersService) {}
 
   logger = new Logger(UsersService.name);
 
   @Get()
-  @UseGuards(AdminGuard)
   async findAll(): Promise<{ users: any[] }> {
     this.logger.log('getting all users');
     const rows = await this.svc.findAll();
@@ -34,7 +32,6 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseGuards(AdminGuard)
   async findOne(
     @Param('id', { schema: z.coerce.number().int() }) id: number,
   ): Promise<{ user: any }> {
@@ -52,7 +49,6 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseGuards(AdminGuard)
   async remove(
     @Param('id', { schema: z.coerce.number().int() }) id: number,
   ): Promise<{ status: string }> {

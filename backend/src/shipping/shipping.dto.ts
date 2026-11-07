@@ -7,7 +7,7 @@ export const CreateShippingDto = z.object({
   city: z.string().min(1),
   address: z.string().min(1),
   price: z.coerce.number().nonnegative(),
-});
+}).strict();
 
 export const UpdateShippingDto = z.object({
   phone: z.string().optional(),
@@ -15,7 +15,7 @@ export const UpdateShippingDto = z.object({
   address: z.string().optional(),
   status: z.enum(['pending', 'approved', 'rejected', 'completed']).optional(),
   price: z.coerce.number().nonnegative().optional(),
-});
+}).strict();
 
 export type CreateShippingDtoType = z.infer<typeof CreateShippingDto>;
 export type UpdateShippingDtoType = z.infer<typeof UpdateShippingDto>;

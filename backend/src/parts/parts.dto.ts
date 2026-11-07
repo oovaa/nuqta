@@ -4,7 +4,7 @@ export const CreatePartDto = z.object({
   name: z.string().min(1),
   type: z.enum(['model', 'ram', 'ssd', 'hdd']),
   price: z.coerce.number().nonnegative(),
-});
+}).strict();
 
 export const UpdatePartDto = CreatePartDto.partial();
 

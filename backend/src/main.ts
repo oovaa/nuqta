@@ -1,5 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { readFileSync } from 'node:fs';
+import cookieParser from 'cookie-parser';
+import { StandardSchemaValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module.js';
 
 try {
@@ -18,6 +20,8 @@ try {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(cookieParser());
+  app.useGlobalPipes(new StandardSchemaValidationPipe());
   app.setGlobalPrefix('api/v1');
   await app.listen(process.env.PORT ?? 3000);
 }

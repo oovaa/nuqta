@@ -11,14 +11,14 @@ export const CreateProductDto = z.object({
   rom: z.string().optional(),
   tag: z.string().optional(),
   company: z.string().optional(),
-});
+}).strict();
 
 export const UpdateProductDto = CreateProductDto.partial();
 
 export const ProductQueryDto = z.object({
   categoryId: z.coerce.number().int().optional(),
   name: z.string().optional(),
-});
+}).strict();
 
 export type CreateProductDtoType = z.infer<typeof CreateProductDto>;
 export type UpdateProductDtoType = z.infer<typeof UpdateProductDto>;
