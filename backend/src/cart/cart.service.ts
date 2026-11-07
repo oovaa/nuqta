@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
 import { and, eq, inArray } from 'drizzle-orm';
-import { carts, products } from '../schema.js';
+import { relations, carts, products } from '../schema.js';
 
-type Db = any;
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
+type Db = NodePgDatabase<typeof relations>;
 
 @Injectable()
 export class CartService {

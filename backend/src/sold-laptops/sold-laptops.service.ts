@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
 import { eq } from 'drizzle-orm';
-import { soldLaptops } from '../schema.js';
+import { relations, soldLaptops } from '../schema.js';
 import { MediaService } from '../media/media.service.js';
 import type { CreateSoldLaptopDtoType, UpdateSoldLaptopDtoType } from './sold-laptops.dto.js';
 
-type Db = any;
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
+type Db = NodePgDatabase<typeof relations>;
 
 @Injectable()
 export class SoldLaptopsService {
@@ -36,7 +37,7 @@ export class SoldLaptopsService {
       conditionRating: this.n(data.conditionRating) ?? 0,
       images,
       price: String(data.price),
-      status: data.status ?? 'pending',
+      status: (data.status ?? 'pending') as 'pending' | 'approved' | 'rejected' | 'completed',
     });
   }
 
@@ -62,7 +63,7 @@ export class SoldLaptopsService {
     if (!res[0]) throw new NotFoundException();
   }
 
-  async updateStatus(id: number, status: string): Promise<void> {
+  async updateStatus(id: number, status: 'pending' | 'approved' | 'rejected' | 'completed'): Promise<void> {
     const res = await this.db.update(soldLaptops).set({ status }).where(eq(soldLaptops.id, id)).returning();
     if (!res[0]) throw new NotFoundException();
   }

@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
 import { eq } from 'drizzle-orm';
-import { shippings } from '../schema.js';
+import { relations, shippings } from '../schema.js';
 import type { CreateShippingDtoType, UpdateShippingDtoType } from './shipping.dto.js';
 
-type Db = any;
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
+type Db = NodePgDatabase<typeof relations>;
 
 @Injectable()
 export class ShippingService {

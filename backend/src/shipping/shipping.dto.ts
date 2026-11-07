@@ -13,7 +13,7 @@ export const UpdateShippingDto = z.object({
   phone: z.string().optional(),
   city: z.string().optional(),
   address: z.string().optional(),
-  status: z.string().optional(),
+  status: z.enum(['pending', 'approved', 'rejected', 'completed']).optional(),
   price: z.coerce.number().nonnegative().optional(),
 });
 

@@ -1,11 +1,12 @@
 import { Injectable, BadRequestException, UnauthorizedException, Logger } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
 import { eq } from 'drizzle-orm';
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as crypto from 'node:crypto';
-import { users } from '../schema.js';
+import { relations, users } from '../schema.js';
 import type { RegisterDtoType } from './auth.dto.js';
 
-type Db = any;
+type Db = NodePgDatabase<typeof relations>;
 
 @Injectable()
 export class AuthService {
@@ -26,23 +27,38 @@ export class AuthService {
   }
 
   private signToken(payload: { sub: number; role: string }, maxAgeSec: number): string {
-    const body = Buffer.from(JSON.stringify({ ...payload, exp: Math.floor(Date.now() / 1000) + maxAgeSec })).toString('base64url');
-    const sig = crypto.createHmac('sha256', process.env.JWT_SECRET ?? 'dev-secret').update(body).digest('base64url');
+    const body = Buffer.from(
+      JSON.stringify({ ...payload, exp: Math.floor(Date.now() / 1000) + maxAgeSec }),
+    ).toString('base64url');
+    const sig = crypto
+      .createHmac('sha256', process.env.JWT_SECRET ?? 'dev-secret')
+      .update(body)
+      .digest('base64url');
     return `${body}.${sig}`;
   }
 
   async register(data: RegisterDtoType): Promise<{ accessToken: string; refreshToken: string }> {
     this.logger.log('register');
-    if (!data.name || !data.email || !data.password) throw new BadRequestException({ error: 'missing attribute' });
+    if (!data.name || !data.email || !data.password)
+      throw new BadRequestException({ error: 'missing attribute' });
+
+    const existing = await this.db.query.users.findFirst({
+      where: { email: data.email },
+    });
+    if (existing) throw new BadRequestException({ error: 'email already exists' });
+
     const password = this.hashPassword(data.password);
-    const rows = await this.db.insert(users).values({
-      name: data.name,
-      email: data.email,
-      password,
-      phone: data.phone ?? null,
-      city: data.city ?? null,
-      address: data.address ?? null,
-    }).returning();
+    const rows = await this.db
+      .insert(users)
+      .values({
+        name: data.name,
+        email: data.email,
+        password,
+        phone: data.phone ?? null,
+        city: data.city ?? null,
+        address: data.address ?? null,
+      })
+      .returning();
     const user = rows[0];
     this.logger.log('register: done');
     return {
@@ -51,7 +67,10 @@ export class AuthService {
     };
   }
 
-  async login(email: string, password: string): Promise<{ accessToken: string; refreshToken: string }> {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     this.logger.log('login');
     if (!email || !password) throw new BadRequestException();
     const rows = await this.db.select().from(users).where(eq(users.email, email)).limit(1);
@@ -68,10 +87,18 @@ export class AuthService {
     this.logger.log('refresh');
     const [body, sig] = token.split('.');
     if (!body || !sig) throw new UnauthorizedException();
-    const expected = crypto.createHmac('sha256', process.env.JWT_SECRET ?? 'dev-secret').update(body).digest('base64url');
-    if (sig.length !== expected.length || !crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) throw new UnauthorizedException();
+    const expected = crypto
+      .createHmac('sha256', process.env.JWT_SECRET ?? 'dev-secret')
+      .update(body)
+      .digest('base64url');
+    if (
+      sig.length !== expected.length ||
+      !crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))
+    )
+      throw new UnauthorizedException();
     const payload = JSON.parse(Buffer.from(body, 'base64url').toString());
-    if (typeof payload.exp !== 'number' || payload.exp < Date.now() / 1000) throw new UnauthorizedException();
+    if (typeof payload.exp !== 'number' || payload.exp < Date.now() / 1000)
+      throw new UnauthorizedException();
     this.logger.log('refresh: success');
     return {
       accessToken: this.signToken({ sub: payload.sub, role: payload.role }, 15 * 60),
@@ -85,8 +112,12 @@ export class AuthService {
     if (newPassword.length < 6) throw new BadRequestException();
     const rows = await this.db.select().from(users).where(eq(users.id, userId)).limit(1);
     const user = rows[0];
-    if (!user || !this.verifyPassword(oldPassword, user.password)) throw new UnauthorizedException();
-    await this.db.update(users).set({ password: this.hashPassword(newPassword) }).where(eq(users.id, userId));
+    if (!user || !this.verifyPassword(oldPassword, user.password))
+      throw new UnauthorizedException();
+    await this.db
+      .update(users)
+      .set({ password: this.hashPassword(newPassword) })
+      .where(eq(users.id, userId));
     this.logger.log('changePassword: done');
   }
 
@@ -100,7 +131,19 @@ export class AuthService {
 
   async getMe(userId: number): Promise<any> {
     this.logger.log(`getMe: userId=${userId}`);
-    const rows = await this.db.select({ id: users.id, name: users.name, email: users.email, phone: users.phone, city: users.city, address: users.address, role: users.role }).from(users).where(eq(users.id, userId)).limit(1);
+    const rows = await this.db
+      .select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        phone: users.phone,
+        city: users.city,
+        address: users.address,
+        role: users.role,
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
     if (!rows[0]) throw new UnauthorizedException();
     return rows[0];
   }

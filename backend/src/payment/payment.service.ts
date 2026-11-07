@@ -1,10 +1,11 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
 import { eq } from 'drizzle-orm';
-import { payments, cashPayments, bankPayments, cardPayments } from '../schema.js';
+import { relations, payments, cashPayments, bankPayments, cardPayments } from '../schema.js';
 import type { CreatePaymentDtoType } from './payment.dto.js';
 
-type Db = any;
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
+type Db = NodePgDatabase<typeof relations>;
 
 @Injectable()
 export class PaymentService {
@@ -24,9 +25,9 @@ export class PaymentService {
     if (method === 'cash') {
       await this.db.insert(cashPayments).values({ paymentId, name: 'cash' });
     } else if (method === 'bank') {
-      await this.db.insert(bankPayments).values({ paymentId, name: 'bank', bankAccountNumber: data.bankAccountNumber });
+      await this.db.insert(bankPayments).values({ paymentId, name: 'bank', bankAccountNumber: data.bankAccountNumber ?? '' });
     } else if (method === 'card') {
-      await this.db.insert(cardPayments).values({ paymentId, name: 'card', cardNumber: data.cardNumber, cvv: data.cvv, expiry: data.expiry });
+      await this.db.insert(cardPayments).values({ paymentId, name: 'card', cardNumber: data.cardNumber ?? '', cvv: data.cvv ?? '', expiry: data.expiry ?? '' });
     }
     this.logger.log('create payment: done');
   }

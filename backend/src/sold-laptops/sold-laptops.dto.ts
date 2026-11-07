@@ -16,13 +16,13 @@ export const CreateSoldLaptopDto = z.object({
   conditionRating: z.coerce.number().int().optional(),
   price: z.coerce.number().nonnegative(),
   images: z.array(z.string()).optional(),
-  status: z.string().optional(),
+  status: z.enum(['pending', 'approved', 'rejected', 'completed']).optional(),
 });
 
 export const UpdateSoldLaptopDto = CreateSoldLaptopDto.partial();
 
 export const UpdateSoldLaptopStatusDto = z.object({
-  status: z.string().min(1),
+  status: z.enum(['pending', 'approved', 'rejected', 'completed']),
 });
 
 export type CreateSoldLaptopDtoType = z.infer<typeof CreateSoldLaptopDto>;

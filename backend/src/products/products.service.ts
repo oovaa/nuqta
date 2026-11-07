@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
 import { eq, and, ilike } from 'drizzle-orm';
-import { products } from '../schema.js';
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { relations, products } from '../schema.js';
 import { MediaService } from '../media/media.service.js';
 import { CacheService } from '../common/cache.service.js';
 import type { CreateProductDtoType, UpdateProductDtoType, ProductQueryDtoType } from './products.dto.js';
 
-type Db = any;
+type Db = NodePgDatabase<typeof relations>;
 
 @Injectable()
 export class ProductsService {
