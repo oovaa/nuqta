@@ -1,9 +1,9 @@
-import { pgTable, serial, text, integer, numeric, timestamp, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, integer, numeric, timestamp, pgEnum, unique } from 'drizzle-orm/pg-core';
 import { defineRelationsPart } from 'drizzle-orm';
 
 // --- Enums ---
 export const userRoleEnum = pgEnum('user_role', ['user', 'admin']);
-export const cartStatusEnum = pgEnum('cart_status', ['active', 'checked_out', 'abandoned']);
+export const cartStatusEnum = pgEnum('cart_status', ['active', 'checked_out', 'abandoned', 'completed']);
 export const statusEnum = pgEnum('status', ['pending', 'approved', 'rejected', 'completed']);
 export const romTypeEnum = pgEnum('rom_type', ['ssd', 'hdd']);
 export const partTypeEnum = pgEnum('part_type', ['model', 'ram', 'ssd', 'hdd']);
@@ -24,7 +24,7 @@ export const users = pgTable('user', {
 // --- 2. Categories Table ---
 export const categories = pgTable('categories', {
   id: serial('id').primaryKey(),
-  name: text('name').notNull(),
+  name: text('name').notNull().unique(),
 });
 
 // --- 3. Products Table ---
@@ -39,11 +39,27 @@ export const products = pgTable('products', {
   ram: text('ram'),
   rom: text('rom'),
   company: text('company'),
+  tag: text('tag'),
   imageUrl: text('image_url'),
   thumbnailImageUrl: text('thumbnail_image_url'),
-  rating: numeric('rating', { precision: 2, scale: 1 }).default('0.0'), // 0-5
+  avgRating: numeric('avg_rating', { precision: 2, scale: 1 }).default('0.0'), // 0-5
   ratingCount: integer('rating_count').default(0).notNull(),
 });
+
+// --- 3b. Reviews Table ---
+export const reviews = pgTable('reviews', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  productId: integer('product_id')
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+  review: text('review').notNull(),
+  rating: integer('rating'),
+}, (t) => ({
+  userProductUnique: unique().on(t.userId, t.productId),
+}));
 
 // --- 4. Sold Laptops Table (User Trade-In / Resell) ---
 export const soldLaptops = pgTable('sold_laptops', {
@@ -150,10 +166,11 @@ export const cardPayments = pgTable('card_payment', {
 });
 
 // --- Relations ---
-const tables = {
+export const tables = {
   users,
   categories,
   products,
+  reviews,
   soldLaptops,
   laptopParts,
   carts,
@@ -275,3 +292,29 @@ export const paymentsRelations = defineRelationsPart(tables, (r) => ({
     }),
   },
 }));
+
+
+
+export const reviewsRelations = defineRelationsPart(tables, (r) => ({
+  reviews: {
+    user: r.one.users({
+      from: r.reviews.userId,
+      to: r.users.id,
+    }),
+    product: r.one.products({
+      from: r.reviews.productId,
+      to: r.products.id,
+    }),
+  },
+}));
+
+export const relations = {
+  ...usersRelations,
+  ...categoriesRelations,
+  ...productsRelations,
+  ...soldLaptopsRelations,
+  ...cartsRelations,
+  ...shippingsRelations,
+  ...paymentsRelations,
+  ...reviewsRelations,
+};
