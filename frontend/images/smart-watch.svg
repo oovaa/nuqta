@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f2937"/><stop offset="1" stop-color="#0b1020"/></linearGradient>
+    <linearGradient id="face" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e3a8a"/><stop offset="1" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="480" fill="url(#bg)"/>
+  <rect x="345" y="0" width="110" height="140" rx="18" fill="#f97316"/>
+  <rect x="345" y="340" width="110" height="140" rx="18" fill="#f97316"/>
+  <rect x="300" y="110" width="200" height="260" rx="56" fill="#9ca3af"/>
+  <rect x="314" y="124" width="172" height="232" rx="44" fill="url(#face)"/>
+  <rect x="498" y="190" width="14" height="50" rx="7" fill="#d1d5db"/>
+  <text x="400" y="235" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="52" fill="#fff">10:09</text>
+  <text x="400" y="275" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#93c5fd">TUE 27</text>
+  <circle cx="400" cy="315" r="14" fill="none" stroke="#22c55e" stroke-width="5"/>
+</svg>

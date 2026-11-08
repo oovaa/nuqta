@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trade-In &amp; Sold Laptops | NUQTA Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .specs-pill-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .spec-badge {
+      background: #f0f0f0;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .thumb-preview {
+      width: 70px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-right: 6px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="admin-sidebar" aria-label="Admin">
+      <div class="admin-brand">NUQTA | Admin</div>
+      <a href="index.html">Overview</a>
+      <a href="products.html">Products</a>
+      <a href="categories.html">Categories</a>
+      <a href="orders.html">Orders</a>
+      <a href="shipping.html">Shipping</a>
+      <a href="payments.html">Payments</a>
+      <a href="users.html">Users</a>
+      <a href="parts.html">Parts &amp; Pricing</a>
+      <a href="trade-ins.html" style="font-weight:700">Trade-in Laptops</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="../index.html">View store</a>
+      <button type="button" id="admin-logout" onclick="adminLogOut()">Log out</button>
+    </nav>
+
+    <main class="admin-main">
+      <div class="admin-top">
+        <h1>Trade-In &amp; Used Laptops</h1>
+        <span class="admin-badge">Admin access only</span>
+      </div>
+
+      <div id="admin-denied" hidden>
+        <p class="empty-state" style="margin-top:30px">This page is for the admin. <a href="../login.html?next=admin/trade-ins.html">Log in with an admin account</a>.</p>
+      </div>
+
+      <div id="admin-content" hidden>
+        <p class="admin-note">Review trade-in laptops submitted by customers. Inspect device health, photos, valuation, and approve or reject submissions.</p>
+
+        <section class="admin-section" id="trade-ins-section" style="margin-top:30px">
+          <div class="table-wrap" id="trade-in-table">
+            <p>Loading trade-in submissions...</p>
+          </div>
+        </section>
+
+        <!-- Trade-in Detail Inspection Modal / Section -->
+        <section class="admin-section" id="trade-in-detail-card" style="display:none; max-width: 960px; margin-top: 40px; padding: 24px; border: 1px solid var(--black); border-radius: 30px;">
+          <div class="form-head">
+            <h2 id="trade-in-detail-title" style="margin-bottom: 10px;">Device Details</h2>
+            <button type="button" class="close-button" onclick="closeTradeInDetail()">&#x2297;</button>
+          </div>
+          <div id="trade-in-detail-body"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      startTradeInsPage();
+    });
+  </script>
+</body>
+</html>

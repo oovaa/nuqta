@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign up | NUQTA Store</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="auth-page">
+    <header class="auth-header">
+      <a href="index.html"><img src="images/logo-blue.svg" alt="NUQTA home" width="185" height="36"></a>
+    </header>
+
+    <main class="auth-main">
+      <section class="auth-box">
+        <h1>Sign up</h1>
+        <form id="register-form" onsubmit="handleRegister(event)">
+          <div class="form-field">
+            <label for="register-name">Name</label>
+            <input id="register-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="80" placeholder="Full name">
+            <span class="field-error" id="register-name-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="register-email">Email</label>
+            <input id="register-email" name="email" type="email" autocomplete="email" required maxlength="120" placeholder="name@example.com">
+            <span class="field-error" id="register-email-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="register-phone">Phone</label>
+            <input id="register-phone" name="phone" type="tel" autocomplete="tel" placeholder="+249 912 345 678">
+            <span class="field-error" id="register-phone-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="register-city">City</label>
+            <input id="register-city" name="city" type="text" autocomplete="address-level2" maxlength="60" placeholder="e.g. Khartoum">
+            <span class="field-error" id="register-city-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="register-address">Address</label>
+            <input id="register-address" name="address" type="text" autocomplete="street-address" maxlength="200" placeholder="Street, Building, Area">
+            <span class="field-error" id="register-address-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="register-password">Password</label>
+            <input id="register-password" name="password" type="password" autocomplete="new-password" required minlength="6" maxlength="128" placeholder="At least 6 characters">
+            <span class="field-error" id="register-password-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="register-confirm">Confirm password</label>
+            <input id="register-confirm" name="confirm_password" type="password" autocomplete="new-password" required minlength="6" maxlength="128" placeholder="Re-type password">
+            <span class="field-error" id="register-confirm-error"></span>
+          </div>
+          <div class="form-field">
+            <label class="checkbox-label"><input id="register-terms" name="terms" value="yes" type="checkbox" required> I agree to the <a href="policies.html#terms">terms</a></label>
+            <span class="field-error" id="register-terms-error"></span>
+          </div>
+          <p class="form-message" id="register-message" role="alert"></p>
+          <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+        </form>
+        <p class="switch-link">Already have an account? <a href="login.html">Log in</a></p>
+      </section>
+    </main>
+
+    <footer class="auth-footer">
+      <a href="policies.html#refund">Refund Policy</a> &middot; <a href="policies.html#terms">Terms</a> &middot; <a href="about.html#contact">Contact</a>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/account.js"></script>
+</body>
+</html>

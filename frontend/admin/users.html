@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registered Users &amp; Roles | NUQTA Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .danger-btn {
+      color: #dc2626 !important;
+      margin-left: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="admin-sidebar" aria-label="Admin">
+      <div class="admin-brand">NUQTA | Admin</div>
+      <a href="index.html">Overview</a>
+      <a href="products.html">Products</a>
+      <a href="categories.html">Categories</a>
+      <a href="orders.html">Orders</a>
+      <a href="shipping.html">Shipping</a>
+      <a href="payments.html">Payments</a>
+      <a href="users.html" style="font-weight:700">Users</a>
+      <a href="parts.html">Parts &amp; Pricing</a>
+      <a href="trade-ins.html">Trade-in Laptops</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="../index.html">View store</a>
+      <button type="button" id="admin-logout" onclick="adminLogOut()">Log out</button>
+    </nav>
+
+    <main class="admin-main">
+      <div class="admin-top">
+        <h1>User Accounts &amp; Access Control</h1>
+        <span class="admin-badge">Admin access only</span>
+      </div>
+
+      <div id="admin-denied" hidden>
+        <p class="empty-state" style="margin-top:30px">This page is for the admin. <a href="../login.html?next=admin/users.html">Log in with an admin account</a>.</p>
+      </div>
+
+      <div id="admin-content" hidden>
+        <p class="admin-note">Manage registered customers and staff, update roles, edit profiles, or reset passwords.</p>
+
+        <section class="admin-section" id="users-section" style="margin-top:20px">
+          <div class="table-wrap" id="user-table">
+            <p>Loading users...</p>
+          </div>
+
+          <!-- Edit User Form -->
+          <form class="admin-form user-form" id="user-form" style="display:none; margin-top:30px;" onsubmit="handleSaveUser(event)">
+            <div class="form-head">
+              <h3 id="user-form-title">Edit user</h3>
+              <button type="button" class="close-button" onclick="closeUserForm()" aria-label="Close form">&#x2297;</button>
+            </div>
+            <input type="hidden" id="user-id" value="">
+            <div class="user-form-grid">
+              <div class="form-field">
+                <label for="user-name">Name</label>
+                <input id="user-name" type="text" required maxlength="80">
+                <span class="field-error" id="user-name-error"></span>
+              </div>
+              <div class="form-field">
+                <label for="user-email">Email</label>
+                <input id="user-email" type="email" required maxlength="120" readonly style="background:#f3f3f3">
+                <span class="field-error" id="user-email-error"></span>
+              </div>
+              <div class="form-field">
+                <label for="user-phone">Phone</label>
+                <input id="user-phone" type="tel">
+                <span class="field-error" id="user-phone-error"></span>
+              </div>
+              <div class="form-field">
+                <label for="user-city">City</label>
+                <input id="user-city" type="text" maxlength="60">
+                <span class="field-error" id="user-city-error"></span>
+              </div>
+              <div class="form-field user-address-field">
+                <label for="user-address">Address</label>
+                <input id="user-address" type="text" maxlength="200">
+                <span class="field-error" id="user-address-error"></span>
+              </div>
+              <div class="form-field">
+                <label for="user-role">Role</label>
+                <select id="user-role">
+                  <option value="user">User / Customer</option>
+                  <option value="admin">Admin</option>
+                </select>
+                <span class="field-error" id="user-role-error"></span>
+              </div>
+            </div>
+            <div class="form-buttons">
+              <button type="button" onclick="closeUserForm()">Cancel</button>
+              <button type="submit" class="save">Save User Details</button>
+            </div>
+          </form>
+
+          <!-- Admin Reset Password Tool Form -->
+          <form class="admin-form" id="reset-password-form" style="display:none; max-width:600px; margin-top:20px;" onsubmit="handleAdminResetPassword(event)">
+            <div class="form-head">
+              <h3 id="reset-user-email-title">Reset User Password</h3>
+              <button type="button" class="close-button" onclick="closeResetPasswordForm()">&#x2297;</button>
+            </div>
+            <input type="hidden" id="reset-email" value="">
+            <div class="form-field">
+              <label for="admin-current-pw">Your Admin Password (Confirmation)</label>
+              <input id="admin-current-pw" type="password" required placeholder="Enter your current password">
+            </div>
+            <div class="form-field">
+              <label for="new-user-pw">New User Password</label>
+              <input id="new-user-pw" type="password" required minlength="6" placeholder="At least 6 characters">
+            </div>
+            <div class="form-buttons">
+              <button type="button" onclick="closeResetPasswordForm()">Cancel</button>
+              <button type="submit" class="save">Update Password</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      startUsersPage();
+    });
+  </script>
+</body>
+</html>

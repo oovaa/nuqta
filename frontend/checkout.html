@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shipping details | NUQTA Store</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="navbar">
+      <a class="logo" href="index.html"><img src="images/logo.svg" alt="NUQTA home"></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Products</a></li>
+        <li><a href="trade-in.html">Sell Laptop</a></li>
+        <li><a href="about.html">About us</a></li>
+      </ul>
+      <div class="nav-actions">
+        <form id="search-form" class="search-form" role="search" method="get" action="shop.html">
+          <label for="search-input" class="visually-hidden">Search products</label>
+          <input id="search-input" type="search" name="q">
+        </form>
+        <a class="header-pill" href="cart.html" aria-label="Shopping cart"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.5"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg><span id="cart-count">(0)</span></a>
+        <a class="header-pill" id="account-link" href="login.html">Log in</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <p class="steps" style="margin-top:-75px">Cart &rarr; <span class="current">Shipping</span> &rarr; Payment &rarr; Done</p>
+
+      <div id="checkout-login-needed" hidden>
+        <p class="empty-state">Please <a href="login.html?next=checkout.html">log in</a> or <a href="register.html">create an account</a> before checking out, so you can track your order.</p>
+      </div>
+
+      <form class="two-columns" id="shipping-form" onsubmit="handleShippingForm(event)">
+        <div>
+          <h1 class="page-title">Shipping details</h1>
+          <div class="form-field">
+            <label for="ship-name">Full Name</label>
+            <input id="ship-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="80">
+            <span class="field-error" id="ship-name-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="ship-phone">Phone</label>
+            <input id="ship-phone" name="phone" type="tel" autocomplete="tel" required placeholder="+249 912 345 678">
+            <span class="field-error" id="ship-phone-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="ship-city">City</label>
+            <input id="ship-city" name="city" type="text" autocomplete="address-level2" required minlength="2" maxlength="60" placeholder="e.g. Khartoum">
+            <span class="field-error" id="ship-city-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="ship-address">Full Address</label>
+            <input id="ship-address" name="address" type="text" autocomplete="street-address" required minlength="8" maxlength="200" placeholder="Street, Building, Area">
+            <span class="field-error" id="ship-address-error"></span>
+          </div>
+        </div>
+
+        <aside class="panel summary" aria-label="Order summary">
+          <h2>Order summary</h2>
+          <div class="summary-items" id="checkout-items">
+            <p>Loading items...</p>
+          </div>
+          <div class="summary-row"><span>Subtotal</span><span id="checkout-subtotal">...</span></div>
+          <div class="summary-row"><span>Shipping</span><span id="checkout-shipping">49 USD</span></div>
+          <div class="summary-row total"><span>Total</span><span id="checkout-total">...</span></div>
+          <p class="note">Review your items before paying.</p>
+          <button type="submit" class="btn btn-primary btn-large">Continue to payment</button>
+        </aside>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bar">
+      <a href="index.html"><img src="images/logo-white.svg" alt="NUQTA home" width="185" height="36"></a>
+      <p>Copyright &copy; 2026 NUQTA.</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      startCheckoutPage();
+    });
+  </script>
+</body>
+</html>

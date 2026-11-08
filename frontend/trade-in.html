@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell &amp; Trade-In Laptop | NUQTA Store</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="navbar">
+      <a class="logo" href="index.html"><img src="images/logo.svg" alt="NUQTA home"></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Products</a></li>
+        <li><a href="trade-in.html" class="active" aria-current="page">Sell Laptop</a></li>
+        <li><a href="about.html">About us</a></li>
+      </ul>
+      <div class="nav-actions">
+        <form id="search-form" class="search-form" role="search" method="get" action="shop.html">
+          <label for="search-input" class="visually-hidden">Search products</label>
+          <input id="search-input" type="search" name="q">
+        </form>
+        <a class="header-pill" href="cart.html" aria-label="Shopping cart"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.5"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg><span id="cart-count">(0)</span></a>
+        <a class="header-pill" id="account-link" href="login.html">Log in</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title">Sell or Trade-In Your Laptop</h1>
+      <p style="font-size: 26px; font-weight: 300; margin-bottom: 40px; color: #555;">
+        Get an honest, instant valuation for your used laptop. Enter device hardware specifications below and our evaluation team will review your submission.
+      </p>
+
+      <div id="trade-in-login-needed" hidden>
+        <p class="empty-state">Please <a href="login.html?next=trade-in.html">log in</a> or <a href="register.html">create an account</a> to submit a laptop for valuation.</p>
+      </div>
+
+      <div class="two-columns" id="trade-in-content">
+        <form class="panel" id="trade-in-form" onsubmit="handleTradeInSubmit(event)" style="padding: 36px 40px;">
+          <h2 style="font-size: 32px; margin-bottom: 24px;">Device Hardware Specifications</h2>
+
+          <div class="two-columns" style="gap: 20px; margin-bottom: 16px;">
+            <div class="form-field">
+              <label for="ti-brand">Brand</label>
+              <input id="ti-brand" type="text" placeholder="e.g. Apple, Dell, Lenovo" required>
+            </div>
+            <div class="form-field">
+              <label for="ti-model">Model Name</label>
+              <input id="ti-model" type="text" placeholder="e.g. MacBook Pro 16, XPS 15" required>
+            </div>
+          </div>
+
+          <div class="two-columns" style="gap: 20px; margin-bottom: 16px;">
+            <div class="form-field">
+              <label for="ti-year">Year of Purchase</label>
+              <input id="ti-year" type="number" min="2012" max="2026" placeholder="e.g. 2024" required>
+            </div>
+            <div class="form-field">
+              <label for="ti-size">Display Size</label>
+              <input id="ti-size" type="text" placeholder="e.g. 14 inch, 16 inch" required>
+            </div>
+          </div>
+
+          <div class="two-columns" style="gap: 20px; margin-bottom: 16px;">
+            <div class="form-field">
+              <label for="ti-cpu">Processor (CPU)</label>
+              <input id="ti-cpu" type="text" placeholder="e.g. M3 Pro, Intel Core i9" required>
+            </div>
+            <div class="form-field">
+              <label for="ti-gpu">Graphics (GPU - optional)</label>
+              <input id="ti-gpu" type="text" placeholder="e.g. RTX 4070, Apple 18-core">
+            </div>
+          </div>
+
+          <div class="two-columns" style="gap: 20px; margin-bottom: 16px;">
+            <div class="form-field">
+              <label for="ti-ram">RAM Memory</label>
+              <input id="ti-ram" type="text" placeholder="e.g. 16GB, 32GB" required>
+            </div>
+            <div class="form-field">
+              <label for="ti-rom">Storage Capacity</label>
+              <input id="ti-rom" type="text" placeholder="e.g. 512GB, 1TB" required>
+            </div>
+          </div>
+
+          <div class="two-columns" style="gap: 20px; margin-bottom: 16px;">
+            <div class="form-field">
+              <label for="ti-rom-type">Storage Type</label>
+              <select id="ti-rom-type" required>
+                <option value="ssd" selected>SSD (Solid State Drive)</option>
+                <option value="hdd">HDD (Hard Disk Drive)</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="ti-condition">Condition Rating (1 to 10)</label>
+              <input id="ti-condition" type="number" min="1" max="10" value="8" required>
+            </div>
+          </div>
+
+          <div class="two-columns" style="gap: 20px; margin-bottom: 16px;">
+            <div class="form-field">
+              <label for="ti-battery">Battery Health % (optional)</label>
+              <input id="ti-battery" type="number" min="1" max="100" placeholder="e.g. 88">
+            </div>
+            <div class="form-field">
+              <label for="ti-cycles">Battery Charge Cycles (optional)</label>
+              <input id="ti-cycles" type="number" min="0" placeholder="e.g. 140">
+            </div>
+          </div>
+
+          <div class="form-field" style="margin-bottom: 20px;">
+            <label for="ti-price">Your Expected Selling Price (USD)</label>
+            <input id="ti-price" type="number" min="10" step="1" placeholder="e.g. 850" required>
+          </div>
+
+          <div class="form-field" style="margin-bottom: 24px;">
+            <span class="field-label" style="font-size: 22px; margin-bottom: 8px;">Upload Photos of the Device</span>
+            <label class="upload-box" for="ti-images" style="height: 140px;">
+              <span class="upload-plus">+</span>
+              <span id="ti-images-name" style="font-size: 18px;">Click to select photos (JPG, PNG, WebP)</span>
+              <input id="ti-images" type="file" name="images" multiple accept="image/*" onchange="previewUploadFiles(this, 'ti-images-name')">
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-large btn-block" id="ti-submit-btn">Submit Laptop for Valuation</button>
+        </form>
+
+        <aside class="panel summary">
+          <h2>How Trade-In Works</h2>
+          <p class="track-text" style="font-size: 22px; margin-bottom: 20px;">
+            <strong>1. Submit specs:</strong> Tell us your hardware configuration and condition.<br><br>
+            <strong>2. Pricing Evaluation:</strong> Our automated pricing engine and technicians review the hardware parts value.<br><br>
+            <strong>3. Payout or Store Credit:</strong> Once verified, receive cash or trade-in credit toward a new device!
+          </p>
+
+          <h3 style="font-size: 24px; margin-top: 30px; margin-bottom: 12px;">Standard Hardware Benchmark</h3>
+          <div id="benchmark-parts-list" style="font-size: 18px; color: #444;">
+            <p>Loading benchmark valuation...</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bar">
+      <a href="index.html"><img src="images/logo-white.svg" alt="NUQTA home" width="185" height="36"></a>
+      <p>Copyright &copy; 2026 NUQTA.</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    async function loadTradeInPage() {
+      await showHeader();
+      const user = window.currentUser;
+      if (!user) {
+        document.getElementById('trade-in-login-needed').hidden = false;
+        document.getElementById('trade-in-content').hidden = true;
+        return;
+      }
+      document.getElementById('trade-in-login-needed').hidden = true;
+      document.getElementById('trade-in-content').hidden = false;
+
+      // Load parts pricing benchmark
+      try {
+        const res = await api.parts.getAll();
+        const parts = res.parts || res || [];
+        const container = document.getElementById('benchmark-parts-list');
+        if (!parts.length) {
+          container.innerHTML = '<p>Standard market rates apply.</p>';
+        } else {
+          container.innerHTML = parts.slice(0, 6).map(p => `
+            <div style="display:flex; justify-content:space-between; padding: 6px 0; border-bottom: 1px solid #eee;">
+              <span><strong>${escapeHTML(p.name)}</strong> (${escapeHTML(p.type)})</span>
+              <span>+${formatPrice(Number(p.price))}</span>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        console.error('Parts benchmark error:', e);
+      }
+    }
+
+    function previewUploadFiles(input, labelId) {
+      const label = document.getElementById(labelId);
+      if (input.files && input.files.length > 0) {
+        label.textContent = `${input.files.length} file(s) selected: ` + Array.from(input.files).map(f => f.name).join(', ');
+      }
+    }
+
+    async function handleTradeInSubmit(event) {
+      event.preventDefault();
+      const user = window.currentUser;
+      if (!user) {
+        showToast('Please log in first');
+        return;
+      }
+
+      const submitBtn = document.getElementById('ti-submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+
+      try {
+        const formData = new FormData();
+        formData.append('userId', user.id);
+        formData.append('brand', document.getElementById('ti-brand').value.trim());
+        formData.append('model', document.getElementById('ti-model').value.trim());
+        formData.append('year', document.getElementById('ti-year').value);
+        formData.append('size', document.getElementById('ti-size').value.trim());
+        formData.append('cpu', document.getElementById('ti-cpu').value.trim());
+        const gpu = document.getElementById('ti-gpu').value.trim();
+        if (gpu) formData.append('gpu', gpu);
+
+        formData.append('ram', document.getElementById('ti-ram').value.trim());
+        formData.append('rom', document.getElementById('ti-rom').value.trim());
+        formData.append('romType', document.getElementById('ti-rom-type').value);
+        formData.append('conditionRating', document.getElementById('ti-condition').value);
+
+        const battery = document.getElementById('ti-battery').value;
+        if (battery) formData.append('batteryHealth', battery);
+
+        const cycles = document.getElementById('ti-cycles').value;
+        if (cycles) formData.append('chargeCycles', cycles);
+
+        formData.append('price', document.getElementById('ti-price').value);
+
+        const filesInput = document.getElementById('ti-images');
+        if (filesInput.files && filesInput.files.length > 0) {
+          for (let i = 0; i < filesInput.files.length; i++) {
+            formData.append('images', filesInput.files[i]);
+          }
+        }
+
+        await api.soldLaptops.create(formData);
+        showToast('Laptop submitted successfully! Our team will review it.');
+        setTimeout(() => {
+          window.location.href = 'account.html#trade-ins';
+        }, 1200);
+      } catch (err) {
+        showToast(err.message || 'Submission failed');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Laptop for Valuation';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadTradeInPage);
+  </script>
+</body>
+</html>

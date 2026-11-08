@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About us | NUQTA Store</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="navbar">
+      <a class="logo" href="index.html"><img src="images/logo.svg" alt="NUQTA home"></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Products</a></li>
+        <li><a href="trade-in.html">Sell Laptop</a></li>
+        <li><a href="about.html" class="active" aria-current="page">About us</a></li>
+      </ul>
+      <div class="nav-actions">
+        <form id="search-form" class="search-form" role="search" method="get" action="shop.html">
+          <label for="search-input" class="visually-hidden">Search products</label>
+          <input id="search-input" type="search" name="q">
+        </form>
+        <a class="header-pill" href="cart.html" aria-label="Shopping cart"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.5"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg><span id="cart-count">(0)</span></a>
+        <a class="header-pill" id="account-link" href="login.html">Log in</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <article class="text-page">
+        <h1>About NUQTA</h1>
+        <p>NUQTA is an online electronics store: phones, laptops, smart watches, earbuds, routers, monitors and VR glasses from well-known brands.
+          Orders are delivered to the customer's door in 3&ndash;5 working days, and every order can be followed on its tracking page.</p>
+        <p>Customers can also trade in and sell their used laptops with immediate valuation and quick payouts.</p>
+
+        <h2 id="contact">Contact us</h2>
+        <p>Email: <a href="mailto:support@nuqta.online">support@nuqta.online</a></p>
+        <p>Phone: +249 900 000 000</p>
+        <p>Support hours: Sunday to Thursday, 9:00 to 17:00</p>
+        <p>Address: Khartoum, Sudan</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bar">
+      <a href="index.html"><img src="images/logo-white.svg" alt="NUQTA home" width="185" height="36"></a>
+      <p>Copyright &copy; 2026 NUQTA.</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      showHeader();
+    });
+  </script>
+</body>
+</html>

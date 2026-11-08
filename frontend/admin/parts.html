@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parts &amp; Pricing | NUQTA Store</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="admin-sidebar" aria-label="Admin">
+      <div class="admin-brand">NUQTA | Admin</div>
+      <a href="index.html">Overview</a>
+      <a href="products.html">Products</a>
+      <a href="categories.html">Categories</a>
+      <a href="orders.html">Orders</a>
+      <a href="shipping.html">Shipping</a>
+      <a href="payments.html">Payments</a>
+      <a href="users.html">Users</a>
+      <a href="parts.html" style="font-weight:700">Parts &amp; Pricing</a>
+      <a href="trade-ins.html">Trade-in Laptops</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="../index.html">View store</a>
+      <button type="button" id="admin-logout" onclick="adminLogOut()">Log out</button>
+    </nav>
+
+    <main class="admin-main">
+      <div class="admin-top">
+        <h1>Laptop Parts &amp; Valuation Pricing</h1>
+        <span class="admin-badge">Admin access only</span>
+      </div>
+
+      <div id="admin-denied" hidden>
+        <p class="empty-state" style="margin-top:30px">This page is for the admin. <a href="../login.html?next=admin/parts.html">Log in with an admin account</a>.</p>
+      </div>
+
+      <div id="admin-content" hidden>
+        <p class="admin-note">Configure valuation prices for models, RAM, SSD and HDD used in laptop trade-in pricing.</p>
+
+        <div class="admin-grid" style="margin-top:30px">
+          <div>
+            <section class="admin-section" id="parts-section">
+              <h2>Parts Price Table</h2>
+              <div class="table-wrap" id="parts-table">
+                <p>Loading parts...</p>
+              </div>
+            </section>
+          </div>
+
+          <!-- Add / Edit Part Form -->
+          <form class="admin-form" id="part-form" onsubmit="handleSavePart(event)">
+            <div class="form-head">
+              <h3 id="part-form-title">Add / edit part</h3>
+              <button type="button" class="close-button" onclick="resetPartForm()" aria-label="Clear form">&#x2297;</button>
+            </div>
+            <input type="hidden" id="part-id" value="">
+            <div class="form-field">
+              <label for="part-name">Part / Spec Name</label>
+              <input id="part-name" type="text" placeholder="e.g. 16GB or 1TB or M2 Max" required maxlength="80">
+              <span class="field-error" id="part-name-error"></span>
+            </div>
+            <div class="form-field">
+              <label for="part-type">Part Type</label>
+              <select id="part-type" required>
+                <option value="">Select type</option>
+                <option value="model">Model</option>
+                <option value="ram">RAM</option>
+                <option value="ssd">SSD</option>
+                <option value="hdd">HDD</option>
+              </select>
+              <span class="field-error" id="part-type-error"></span>
+            </div>
+            <div class="form-field">
+              <label for="part-price">Price / Valuation (USD)</label>
+              <input id="part-price" type="number" min="0" step="0.01" placeholder="0.00" required>
+              <span class="field-error" id="part-price-error"></span>
+            </div>
+            <div class="form-buttons">
+              <button type="button" onclick="resetPartForm()">Cancel</button>
+              <button type="submit" class="save" id="part-save-btn">Save Part</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      startPartsPage();
+    });
+  </script>
+</body>
+</html>

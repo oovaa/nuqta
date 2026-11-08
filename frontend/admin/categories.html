@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Categories | NUQTA Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .danger-btn {
+      color: #dc2626 !important;
+      margin-left: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="admin-sidebar" aria-label="Admin">
+      <div class="admin-brand">NUQTA | Admin</div>
+      <a href="index.html">Overview</a>
+      <a href="products.html">Products</a>
+      <a href="categories.html" style="font-weight:700">Categories</a>
+      <a href="orders.html">Orders</a>
+      <a href="shipping.html">Shipping</a>
+      <a href="payments.html">Payments</a>
+      <a href="users.html">Users</a>
+      <a href="parts.html">Parts &amp; Pricing</a>
+      <a href="trade-ins.html">Trade-in Laptops</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="../index.html">View store</a>
+      <button type="button" id="admin-logout" onclick="adminLogOut()">Log out</button>
+    </nav>
+
+    <main class="admin-main">
+      <div class="admin-top">
+        <h1>Product Categories</h1>
+        <span class="admin-badge">Admin access only</span>
+      </div>
+
+      <div id="admin-denied" hidden>
+        <p class="empty-state" style="margin-top:30px">This page is for the admin. <a href="../login.html?next=admin/categories.html">Log in with an admin account</a>.</p>
+      </div>
+
+      <div id="admin-content" hidden>
+        <p class="admin-note">Create, rename, and manage catalog categories used in storefront navigation and filters.</p>
+
+        <div class="admin-grid" style="margin-top:24px">
+          <div>
+            <section class="admin-section" id="categories">
+              <h2>Category List</h2>
+              <div class="table-wrap" id="category-table" style="margin-top:16px">
+                <p>Loading categories...</p>
+              </div>
+            </section>
+          </div>
+
+          <!-- Add / Edit Category Form -->
+          <form class="admin-form" id="category-form" onsubmit="handleSaveCategory(event)">
+            <div class="form-head">
+              <h3 id="category-form-title">Add / edit category</h3>
+              <button type="button" class="close-button" onclick="resetCategoryForm()" aria-label="Clear">&#x2297;</button>
+            </div>
+            <input type="hidden" id="category-id" value="">
+            <div class="form-field">
+              <label for="new-category">Category Name</label>
+              <input id="new-category" type="text" placeholder="e.g. Laptops, Audio, Smartphones" required maxlength="40">
+              <p class="field-error" id="new-category-error"></p>
+            </div>
+            <div class="form-buttons">
+              <button type="button" onclick="resetCategoryForm()">Cancel</button>
+              <button type="submit" class="save" id="category-submit-btn">Save Category</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      startCategoriesPage();
+    });
+  </script>
+</body>
+</html>

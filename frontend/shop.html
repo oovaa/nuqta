@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products | NUQTA Store</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="navbar">
+      <a class="logo" href="index.html"><img src="images/logo.svg" alt="NUQTA home"></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html" class="active" aria-current="page">Products</a></li>
+        <li><a href="trade-in.html">Sell Laptop</a></li>
+        <li><a href="about.html">About us</a></li>
+      </ul>
+      <div class="nav-actions">
+        <form id="search-form" class="search-form" role="search" onsubmit="event.preventDefault(); filtersChanged();">
+          <label for="search-input" class="visually-hidden">Search products</label>
+          <input id="search-input" type="search" name="q" placeholder="Search..." oninput="filtersChanged()">
+        </form>
+        <a class="header-pill" href="cart.html" aria-label="Shopping cart"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4h2l2.4 11h11l2-8H6.5"/><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg><span id="cart-count">(0)</span></a>
+        <a class="header-pill" id="account-link" href="login.html">Log in</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1 class="page-title" style="margin-bottom:22px">Products</h1>
+      <div class="chip-row" id="category-chips">
+        <p>Loading categories...</p>
+      </div>
+
+      <div class="shop-layout">
+        <div>
+          <input type="checkbox" id="show-filters" class="visually-hidden" aria-controls="filters">
+          <label class="btn btn-outline btn-block filter-toggle" for="show-filters"><span class="when-closed">Show filters</span><span class="when-open">Hide filters</span></label>
+
+          <form class="filters collapsed" id="filters" onsubmit="event.preventDefault(); filtersChanged();">
+            <div class="filters-header">
+              <h2>Filters</h2>
+              <a class="link-button" id="clear-filters" href="#" onclick="clearFilters(); return false;">Clear All</a>
+            </div>
+            <fieldset>
+              <legend>Price</legend>
+              <div class="price-inputs">
+                <label class="visually-hidden" for="min-price">Minimum price</label>
+                <input type="number" id="min-price" name="min_price" placeholder="Min" min="0" oninput="filtersChanged()">
+                <label class="visually-hidden" for="max-price">Maximum price</label>
+                <input type="number" id="max-price" name="max_price" placeholder="Max" min="0" oninput="filtersChanged()">
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Company</legend>
+              <div>
+                <label><input type="checkbox" name="brand" value="Apple" onchange="filtersChanged()"> Apple</label>
+                <label><input type="checkbox" name="brand" value="Samsung" onchange="filtersChanged()"> Samsung</label>
+                <label><input type="checkbox" name="brand" value="Google" onchange="filtersChanged()"> Google</label>
+                <label><input type="checkbox" name="brand" value="ASUS" onchange="filtersChanged()"> ASUS</label>
+                <label><input type="checkbox" name="brand" value="Lenovo" onchange="filtersChanged()"> Lenovo</label>
+                <label><input type="checkbox" name="brand" value="OnePlus" onchange="filtersChanged()"> OnePlus</label>
+                <label><input type="checkbox" name="brand" value="Oppo" onchange="filtersChanged()"> Oppo</label>
+                <label><input type="checkbox" name="brand" value="Honor" onchange="filtersChanged()"> Honor</label>
+                <label><input type="checkbox" name="brand" value="Nothing" onchange="filtersChanged()"> Nothing</label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>RAM</legend>
+              <div>
+                <label><input type="checkbox" name="ram" value="8GB" onchange="filtersChanged()"> 8GB</label>
+                <label><input type="checkbox" name="ram" value="12GB" onchange="filtersChanged()"> 12GB</label>
+                <label><input type="checkbox" name="ram" value="16GB" onchange="filtersChanged()"> 16GB</label>
+                <label><input type="checkbox" name="ram" value="32GB" onchange="filtersChanged()"> 32GB</label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>ROM</legend>
+              <div>
+                <label><input type="checkbox" name="rom" value="128GB" onchange="filtersChanged()"> 128GB</label>
+                <label><input type="checkbox" name="rom" value="256GB" onchange="filtersChanged()"> 256GB</label>
+                <label><input type="checkbox" name="rom" value="512GB" onchange="filtersChanged()"> 512GB</label>
+                <label><input type="checkbox" name="rom" value="1TB" onchange="filtersChanged()"> 1TB</label>
+                <label><input type="checkbox" name="rom" value="2TB" onchange="filtersChanged()"> 2TB</label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Sort by</legend>
+              <label><input type="radio" name="sort" value="newest" checked onchange="filtersChanged()"> Newest</label>
+              <label><input type="radio" name="sort" value="popular" onchange="filtersChanged()"> Most popular</label>
+              <label><input type="radio" name="sort" value="price-low" onchange="filtersChanged()"> Price: low to high</label>
+              <label><input type="radio" name="sort" value="price-high" onchange="filtersChanged()"> Price: high to low</label>
+            </fieldset>
+            <button type="submit" class="apply-button">Apply Filters</button>
+          </form>
+        </div>
+
+        <section aria-label="Product results">
+          <div class="product-grid" id="product-grid">
+            <p>Loading products...</p>
+          </div>
+          <p class="results-bar" id="result-count"></p>
+          <nav class="load-more-wrap" aria-label="Result pages">
+            <button type="button" class="btn btn-primary" id="load-more" onclick="loadMore()">Load more</button>
+          </nav>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bar">
+      <a href="index.html"><img src="images/logo-white.svg" alt="NUQTA home" width="185" height="36"></a>
+      <p>Copyright &copy; 2026 NUQTA.</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/shop.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      startShopPage();
+    });
+  </script>
+</body>
+</html>

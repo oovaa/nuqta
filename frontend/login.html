@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in | NUQTA Store</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="auth-page">
+    <header class="auth-header">
+      <a href="index.html"><img src="images/logo-blue.svg" alt="NUQTA home" width="185" height="36"></a>
+    </header>
+
+    <main class="auth-main">
+      <section class="auth-box">
+        <h1>Log In</h1>
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="form-field">
+            <label for="login-email">Email</label>
+            <input id="login-email" name="email" type="email" autocomplete="email" required maxlength="120" placeholder="Email">
+            <span class="field-error" id="login-email-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="login-password">Password</label>
+            <input id="login-password" name="password" type="password" autocomplete="current-password" required placeholder="Enter password">
+            <span class="field-error" id="login-password-error"></span>
+          </div>
+          <p class="form-message" id="login-message" role="alert"></p>
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top:14px">Log In</button>
+        </form>
+        <p class="switch-link">
+          <a href="#" onclick="showForgotPasswordMessage(event)" id="forgot-link" style="color:#000;text-decoration:none">Forgot Password?</a>
+        </p>
+        <p class="switch-link">Don't have an account? <a href="register.html">Sign up</a></p>
+      </section>
+    </main>
+
+    <footer class="auth-footer">
+      <a href="policies.html#refund">Refund Policy</a> &middot; <a href="policies.html#terms">Terms</a> &middot; <a href="about.html#contact">Contact</a>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/account.js"></script>
+</body>
+</html>
