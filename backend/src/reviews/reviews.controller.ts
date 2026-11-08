@@ -7,12 +7,12 @@ import type { CreateReviewDtoType, UpdateReviewDtoType } from './reviews.dto.js'
 import { z } from 'zod';
 
 @Controller('reviews')
-@UseGuards(AuthGuard)
 export class ReviewsController {
   private readonly logger = new Logger(ReviewsController.name);
   constructor(private readonly svc: ReviewsService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   async create(@Req() req: Request, @Body({ schema: CreateReviewDto }) body: CreateReviewDtoType): Promise<{ status: string }> {
     this.logger.log('POST /reviews');
     await this.svc.create({
@@ -46,6 +46,7 @@ export class ReviewsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   async update(@Param('id', { schema: z.coerce.number().int() }) id: number, @Body({ schema: UpdateReviewDto }) body: UpdateReviewDtoType): Promise<{ status: string }> {
     this.logger.log(`PATCH /reviews/${id}`);
     await this.svc.update(id, {
@@ -56,6 +57,7 @@ export class ReviewsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async remove(@Param('id', { schema: z.coerce.number().int() }) id: number): Promise<{ status: string }> {
     this.logger.log(`DELETE /reviews/${id}`);
     await this.svc.remove(id);

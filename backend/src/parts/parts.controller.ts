@@ -6,11 +6,11 @@ import type { CreatePartDtoType, UpdatePartDtoType } from './parts.dto.js';
 import { z } from 'zod';
 
 @Controller('parts')
-@UseGuards(AuthGuard)
 export class PartsController {
   constructor(private readonly svc: PartsService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   async create(@Body({ schema: CreatePartDto }) body: CreatePartDtoType): Promise<{ status: string }> {
     if (!body.name || !body.type || body.price === undefined) throw new BadRequestException();
     await this.svc.create(body);
@@ -30,12 +30,14 @@ export class PartsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   async update(@Param('id', { schema: z.coerce.number().int() }) id: number, @Body({ schema: UpdatePartDto }) body: UpdatePartDtoType): Promise<{ status: string }> {
     await this.svc.update(id, body);
     return { status: 'ok' };
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async remove(@Param('id', { schema: z.coerce.number().int() }) id: number): Promise<{ status: string }> {
     await this.svc.remove(id);
     return { status: 'ok' };

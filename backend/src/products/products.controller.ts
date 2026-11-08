@@ -7,12 +7,12 @@ import type { CreateProductDtoType, UpdateProductDtoType, ProductQueryDtoType } 
 import { z } from 'zod';
 
 @Controller('products')
-@UseGuards(AuthGuard)
 export class ProductsController {
   private readonly logger = new Logger(ProductsController.name);
   constructor(private readonly svc: ProductsService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]))
   async create(@Body({ schema: CreateProductDto }) body: CreateProductDtoType, @UploadedFiles() files?: any): Promise<{ status: string }> {
     this.logger.log('POST /products');
@@ -71,6 +71,7 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileFieldsInterceptor([{ name: 'image', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]))
   async update(@Param('id', { schema: z.coerce.number().int() }) id: number, @Body({ schema: UpdateProductDto }) body: UpdateProductDtoType, @UploadedFiles() files?: any): Promise<any> {
     this.logger.log(`PATCH /products/${id}`);
@@ -97,6 +98,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async remove(@Param('id', { schema: z.coerce.number().int() }) id: number): Promise<{ status: string }> {
     this.logger.log(`DELETE /products/${id}`);
     await this.svc.remove(id);

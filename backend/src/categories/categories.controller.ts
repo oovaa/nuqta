@@ -6,12 +6,12 @@ import { CreateCategoryDto, UpdateCategoryDto } from './categories.dto.js';
 import type { CreateCategoryDtoType, UpdateCategoryDtoType } from './categories.dto.js';
 
 @Controller('categories')
-@UseGuards(AuthGuard)
 export class CategoriesController {
   private readonly logger = new Logger(CategoriesController.name);
   constructor(private readonly svc: CategoriesService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   async create(@Body({ schema: CreateCategoryDto }) body: CreateCategoryDtoType): Promise<{ status: string }> {
     this.logger.log('POST /categories');
     await this.svc.create(body.name);
@@ -33,6 +33,7 @@ export class CategoriesController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   async update(@Param('id', { schema: z.coerce.number().int() }) id: number, @Body({ schema: UpdateCategoryDto }) body: UpdateCategoryDtoType): Promise<{ status: string }> {
     this.logger.log(`PATCH /categories/${id}`);
     await this.svc.update(id, body.name);
@@ -40,6 +41,7 @@ export class CategoriesController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async remove(@Param('id') id: string): Promise<{ status: string }> {
     this.logger.log(`DELETE /categories/${id}`);
     await this.svc.removeByIdOrName(id);
