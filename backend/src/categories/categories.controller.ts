@@ -1,9 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, BadRequestException, Logger } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+  Logger,
+} from '@nestjs/common';
 import { AuthGuard } from '../common/auth.guard.js';
 import { CategoriesService } from './categories.service.js';
 import { z } from 'zod';
 import { CreateCategoryDto, UpdateCategoryDto } from './categories.dto.js';
 import type { CreateCategoryDtoType, UpdateCategoryDtoType } from './categories.dto.js';
+import { AdminGuard } from '../common/admin.guard.js';
 
 @Controller('categories')
 export class CategoriesController {
@@ -11,8 +22,10 @@ export class CategoriesController {
   constructor(private readonly svc: CategoriesService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
-  async create(@Body({ schema: CreateCategoryDto }) body: CreateCategoryDtoType): Promise<{ status: string }> {
+  @UseGuards(AuthGuard, AdminGuard)
+  async create(
+    @Body({ schema: CreateCategoryDto }) body: CreateCategoryDtoType,
+  ): Promise<{ status: string }> {
     this.logger.log('POST /categories');
     await this.svc.create(body.name);
     return { status: 'ok' };
@@ -26,22 +39,27 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', { schema: z.coerce.number().int() }) id: number): Promise<{ categories: { name: string }[] }> {
+  async findOne(
+    @Param('id', { schema: z.coerce.number().int() }) id: number,
+  ): Promise<{ categories: { name: string }[] }> {
     this.logger.log(`GET /categories/${id}`);
     const row = await this.svc.findOne(id);
     return { categories: [{ name: row.name }] };
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
-  async update(@Param('id', { schema: z.coerce.number().int() }) id: number, @Body({ schema: UpdateCategoryDto }) body: UpdateCategoryDtoType): Promise<{ status: string }> {
+  @UseGuards(AuthGuard, AdminGuard)
+  async update(
+    @Param('id', { schema: z.coerce.number().int() }) id: number,
+    @Body({ schema: UpdateCategoryDto }) body: UpdateCategoryDtoType,
+  ): Promise<{ status: string }> {
     this.logger.log(`PATCH /categories/${id}`);
     await this.svc.update(id, body.name);
     return { status: 'ok' };
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   async remove(@Param('id') id: string): Promise<{ status: string }> {
     this.logger.log(`DELETE /categories/${id}`);
     await this.svc.removeByIdOrName(id);

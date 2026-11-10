@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, BadRequestException, Logger } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+  Logger,
+} from '@nestjs/common';
 import { AuthGuard } from '../common/auth.guard.js';
 import { ShippingService } from './shipping.service.js';
 import { CreateShippingDto, UpdateShippingDto } from './shipping.dto.js';
@@ -12,7 +22,9 @@ export class ShippingController {
   constructor(private readonly svc: ShippingService) {}
 
   @Post()
-  async create(@Body({ schema: CreateShippingDto }) body: CreateShippingDtoType): Promise<{ status: string }> {
+  async create(
+    @Body({ schema: CreateShippingDto }) body: CreateShippingDtoType,
+  ): Promise<{ status: string }> {
     this.logger.log('POST /shipping');
     await this.svc.create(body);
     return { status: 'ok' };
@@ -26,7 +38,9 @@ export class ShippingController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', { schema: z.coerce.number().int() }) id: number): Promise<{ shipping: any }> {
+  async findOne(
+    @Param('id', { schema: z.coerce.number().int() }) id: number,
+  ): Promise<{ shipping: any }> {
     this.logger.log(`GET /shipping/${id}`);
     const r = await this.svc.findOne(id);
     return {
@@ -44,21 +58,28 @@ export class ShippingController {
   }
 
   @Get(':id/status')
-  async status(@Param('id', { schema: z.coerce.number().int() }) id: number): Promise<{ status: string }> {
+  async status(
+    @Param('id', { schema: z.coerce.number().int() }) id: number,
+  ): Promise<{ status: string }> {
     this.logger.log(`GET /shipping/${id}/status`);
     const s = await this.svc.getStatus(id);
     return { status: s };
   }
 
   @Patch(':id')
-  async update(@Param('id', { schema: z.coerce.number().int() }) id: number, @Body({ schema: UpdateShippingDto }) body: UpdateShippingDtoType): Promise<{ status: string }> {
+  async update(
+    @Param('id', { schema: z.coerce.number().int() }) id: number,
+    @Body({ schema: UpdateShippingDto }) body: UpdateShippingDtoType,
+  ): Promise<{ status: string }> {
     this.logger.log(`PATCH /shipping/${id}`);
     await this.svc.update(id, body);
     return { status: 'ok' };
   }
 
   @Delete(':id')
-  async remove(@Param('id', { schema: z.coerce.number().int() }) id: number): Promise<{ status: string }> {
+  async remove(
+    @Param('id', { schema: z.coerce.number().int() }) id: number,
+  ): Promise<{ status: string }> {
     this.logger.log(`DELETE /shipping/${id}`);
     await this.svc.remove(id);
     return { status: 'ok' };

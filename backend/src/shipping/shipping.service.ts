@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
-import { eq } from 'drizzle-orm';
-import { relations, shippings } from '../schema.js';
+import { eq, inArray } from 'drizzle-orm';
+import { relations, shippings, products } from '../schema.js';
 import type { CreateShippingDtoType, UpdateShippingDtoType } from './shipping.dto.js';
 
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -27,14 +27,31 @@ export class ShippingService {
 
   async findAll(): Promise<any[]> {
     this.logger.log('findAll shipping');
-    return this.db.select().from(shippings);
+    const allShippments = await this.db.query.shippings.findMany({
+      with: { cart: true, payments: true, user: true },
+    });
+
+    for (const sh of allShippments) {
+      const ids: number[] = sh.cart?.productsIds ?? [];
+      if (sh.cart) {
+        (sh.cart as any).products = ids.length
+          ? await this.db.select().from(products).where(inArray(products.id, ids))
+          : [];
+      }
+    }
+    return allShippments;
   }
 
   async findOne(id: number): Promise<any> {
     this.logger.log(`findOne shipping: id=${id}`);
-    const rows = await this.db.select().from(shippings).where(eq(shippings.id, id)).limit(1);
-    if (!rows[0]) throw new NotFoundException();
-    return rows[0];
+    const rows = await this.db.query.shippings.findFirst({
+      where: { id },
+      with: { cart: true, user: true, payments: true },
+    });
+    if (!rows) {
+      throw new NotFoundException();
+    }
+    return rows;
   }
 
   async getStatus(id: number): Promise<string> {
